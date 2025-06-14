@@ -1,3 +1,12 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #121212;
+    /* 移除上下白邊，設深色背景 */
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	font-family: 'Roboto', 'Noto Sans TC', sans-serif;

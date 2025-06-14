@@ -1,8 +1,14 @@
 body {
 	margin: 0;
 	font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-	background-color: #121212; /* Dark background */
 	color: #ffffff; /* 提高對比度，使用純白字體 */
+}
+
+.page-wrapper {
+    position: relative; /* Needed if any absolute positioning was tied to body */
+    z-index: 1; /* Ensures it's above any remnants if body had complex stacking */
+    background-color: #121212; /* Maintain dark background */
+    /* Add any other global page styling here if needed */
 }
 
 .container {
@@ -11,11 +17,17 @@ body {
 	padding: 30px;
 	border-radius: 8px;
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Adjusted shadow for dark theme */
+	position: relative;
+	z-index: 2;
 }
 
 h1.display-4 {
 	font-weight: 700;
 	color: #ffcc00; /* 使用亮黃色標題，增加吸引力 */
+}
+
+header p.lead {
+    text-shadow: none;
 }
 
 .project-info p {

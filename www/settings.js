@@ -51,6 +51,12 @@ const remote_url = document.querySelector('#remote_url');
 const PUBLIC_SERVER_URL = "http://maxbot.dropboxlike.com:16888/";
 
 // dictionary
+const bot_question_area = document.querySelector('#bot-question-area');
+const bot_question_text = document.querySelector('#bot-question-text');
+const bot_answer_input = document.querySelector('#bot-answer-input');
+const submit_bot_answer_btn = document.querySelector('#submit-bot-answer-btn');
+const bot_answer_feedback = document.querySelector('#bot-answer-feedback');
+const pause_resume_feedback = document.querySelector('#pause_resume_feedback');
 const user_guess_string = document.querySelector('#user_guess_string');
 
 

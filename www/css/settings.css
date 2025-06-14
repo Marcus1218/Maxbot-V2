@@ -1,8 +1,12 @@
 body {
-	margin: 0;
-	font-family: 'Roboto', 'Noto Sans TC', sans-serif;
-	background-color: #121212; /* Dark background */
-	color: #ffffff; /* 提高對比度，使用純白字體 */
+            margin: 0;
+            font-family: 'Roboto', 'Noto Sans TC', sans-serif;
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* 提高對比度，使用純白字體 */
+            background-image: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjNxeGR6dmQxbzZycWd5aHYzYTBoNmdza25oMHl6YzdpaGx5aWI3ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3vRnoppYtfEbemBO/giphy.gif');
+            background-repeat: repeat;
+            background-size: auto;
+            background-attachment: fixed;
 }
 
 .container {
@@ -325,4 +329,21 @@ a:hover {
 ::-moz-selection {
   background: #bb86fc;
   color: #121212;
+}
+
+.side-gif {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100px;
+    height: auto;
+    z-index: 5;
+}
+
+.left-gif {
+    left: 20px;
+}
+
+.right-gif {
+    right: 20px;
 }

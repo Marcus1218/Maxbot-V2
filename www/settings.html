@@ -8,21 +8,17 @@
   <script src="dist/bootstrap/bootstrap.min.js"></script>
   <script src="dist/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="css/settings.css" />
-  <link rel="stylesheet" type="text/css" href="css/8bit-bg.css" />
   <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
   <link rel="icon" href="/favicon.ico">
 </head>
 <body>
-  <canvas id="pixel-bg-canvas" width="963" height="384"></canvas>
-  <div id="dynamic-gif" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2;">
-    <img src="icons/8bit-animation.gif" alt="8bit Animation" style="width: 300px; height: auto; animation: bounce 3s infinite;">
-  </div>
+  <div class="page-wrapper">
   <div class="container mt-5">
     <header class="text-center mb-4 pt-4"> <!-- Reduced mb and added pt for spacing -->
       <!-- <img src="icons/maxbot-64.png" alt="MaxBot Logo" class="mb-3"> --> <!-- Logo removed -->
       <h1 class="display-4">MaxBot 機械人設定</h1>
-      <p class="lead text-light" style="font-size: 1.5rem; font-weight: bold; text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);">香港版</p>
+      <p class="lead text-light" style="font-size: 1.5rem; font-weight: bold;">香港版</p>
     </header>
     <div class="project-info text-center mb-4">
       <p>作者：Marcus　|　專案參考自 <a href="https://github.com/lovefirst02/tix_bot" target="_blank" class="text-decoration-none">Maxbot 開放原始碼</a></p>
@@ -577,8 +573,27 @@
               <span id="maxbot_status"></span>
               <button class="btn btn-primary" id="pause_btn">暫停搶票</button>
               <button class="btn btn-primary" id="resume_btn">接繼搶票</button>
+              <span id="pause_resume_feedback" class="ms-3"></span>
             </div>
           </div>
+
+          <div class="row mb-3" id="bot-question-area" style="display: none;">
+            <label class="col-sm-2 col-form-label text-warning">Bot Question:</label>
+            <div class="col-sm-10">
+                <pre id="bot-question-text" class="form-control-plaintext text-warning" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="bot-answer-input" placeholder="Enter your answer here">
+                    <button class="btn btn-outline-warning" type="button" id="submit-bot-answer-btn">Submit Answer</button>
+                </div>
+                <div id="bot-answer-feedback" class="form-text"></div>
+            </div>
+          </div>
+        <div class="row mb-3">
+            <label for="bot-log-display" class="col-sm-2 col-form-label">Bot Log:</label>
+            <div class="col-sm-10">
+                <pre id="bot-log-display" class="form-control" style="height: 200px; overflow-y: scroll; background-color: #282c34; color: #abb2bf; border: 1px solid #444; font-family: 'Consolas', 'Menlo', 'monospace'; font-size: 0.85em; white-space: pre-wrap; word-wrap: break-word;"></pre>
+            </div>
+        </div>
 
           <div class="row mb-3">
             <label for="last_url" class="col-sm-2 col-form-label">執行網址</label>
@@ -621,9 +636,6 @@
               <textarea class="form-control" id="resume_keyword_second" rows="3"></textarea>
             </div>
           </div>
-
-
-
         </div>
 
       </div>
@@ -656,16 +668,11 @@
   </div>
 
     <script src="settings.js\"></script>
+    <script src="settings_interactive.js"></script>
     <footer class="text-center mt-5 mb-3">
       <p class="text-light" style="font-size: 1.2rem; font-weight: bold; text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);">&copy; 2024-2025 MaxBot HK. All rights reserved.</p>
     </footer>
     </div>
+  </div>
 </body>
 </html>
-
-<style>
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-</style>

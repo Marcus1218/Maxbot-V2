@@ -5,6 +5,7 @@ import base64
 import json
 import os
 import platform
+from collections import deque # New import
 import subprocess
 import sys
 import threading
@@ -48,6 +49,7 @@ CONST_MAXBOT_EXTENSION_STATUS_JSON = "status.json"
 CONST_MAXBOT_INT28_FILE = "MAXBOT_INT28_IDLE.txt"
 CONST_MAXBOT_LAST_URL_FILE = "MAXBOT_LAST_URL.txt"
 CONST_MAXBOT_QUESTION_FILE = "MAXBOT_QUESTION.txt"
+CONST_MAXBOT_LOG_FILE = "maxbot_runtime.log"
 
 CONST_SERVER_PORT = 16888
 
@@ -549,6 +551,95 @@ class QueryHandler(tornado.web.RequestHandler):
         #print("answer_text_output:", answer_text_output)
         self.write(answer_text_output)
 
+class GetQuestionHandler(tornado.web.RequestHandler):
+    def get(self):
+        question_content = ""
+        if os.path.exists(CONST_MAXBOT_QUESTION_FILE):
+            try:
+                with open(CONST_MAXBOT_QUESTION_FILE, "r", encoding="utf-8") as f:
+                    question_content = f.read().strip()
+            except Exception as e:
+                print(f"Error reading question file: {e}")
+                question_content = "" # Ensure it's a string
+        self.write({"question": question_content})
+
+class SubmitAnswerHandler(tornado.web.RequestHandler):
+    def post(self):
+        try:
+            data = json.loads(self.request.body)
+            answer = data.get("answer", "").strip()
+
+            if not answer:
+                self.set_status(400)
+                self.write({"error": "Answer cannot be empty."})
+                return
+
+            answers = []
+            if os.path.exists(CONST_MAXBOT_ANSWER_ONLINE_FILE):
+                try:
+                    with open(CONST_MAXBOT_ANSWER_ONLINE_FILE, "r", encoding="utf-8") as f:
+                        content = f.read().strip()
+                        if content:
+                            # Attempt to parse as JSON array string, as expected by util.get_answer_list_from_user_guess_string
+                            # which uses format_config_keyword_for_json and then json.loads("[" + content + "]")
+                            # So, the file should contain something like: "ans1", "ans2"
+                            current_answers_text = f"[{content}]" # Wrap to make it a valid JSON array
+                            answers = json.loads(current_answers_text)
+                except json.JSONDecodeError:
+                    print(f"Warning: {CONST_MAXBOT_ANSWER_ONLINE_FILE} does not contain a valid JSON array string. Starting fresh.")
+                    answers = [] # Start fresh if content is not as expected
+                except Exception as e:
+                    print(f"Error reading or parsing answer file: {e}")
+                    answers = [] # Start fresh on other errors
+
+            if not isinstance(answers, list): # Ensure it's a list after loading
+                answers = []
+
+            answers.append(answer)
+
+            # Write back as a comma-separated string of JSON-encoded strings (e.g., "ans1", "ans2")
+            # This matches how util.format_config_keyword_for_json and then json.loads expect it.
+            answer_file_content = ", ".join([json.dumps(ans) for ans in answers])
+
+            try:
+                with open(CONST_MAXBOT_ANSWER_ONLINE_FILE, "w", encoding="utf-8") as f:
+                    f.write(answer_file_content)
+                self.write({"message": "Answer submitted successfully"})
+            except Exception as e:
+                print(f"Error writing answer file: {e}")
+                self.set_status(500)
+                self.write({"error": "Failed to write answer to file."})
+
+        except json.JSONDecodeError:
+            self.set_status(400)
+            self.write({"error": "Invalid JSON input."})
+        except Exception as e:
+            print(f"Error in SubmitAnswerHandler: {e}")
+            self.set_status(500)
+            self.write({"error": "An unexpected error occurred."})
+
+class GetLogHandler(tornado.web.RequestHandler):
+    def get(self):
+        logs = []
+        # Assuming CONST_MAXBOT_LOG_FILE is defined in this file and points to the log file name
+        # By default, this will assume the log file is in the same directory as settings.py
+        # which should be the project root for this application structure.
+        log_file_path = CONST_MAXBOT_LOG_FILE
+
+        if os.path.exists(log_file_path):
+            try:
+                with open(log_file_path, "r", encoding="utf-8") as f:
+                    # Efficiently get the last N lines
+                    last_n_lines = 50
+                    logs = list(deque(f, last_n_lines))
+            except Exception as e:
+                # Log to console, and also send error as part of response
+                print(f"Error reading log file ({log_file_path}): {e}")
+                logs = [f"Error reading log file: {e}"]
+        else:
+            logs = ["Log file not found."]
+        self.write({"logs": logs})
+
 async def main_server():
     ocr = None
     try:
@@ -574,7 +665,10 @@ async def main_server():
 
         ("/ocr", OcrHandler),
         ("/query", QueryHandler),
-        ("/question", QuestionHandler),
+        ("/question", QuestionHandler), # Original question handler, might be different from GetQuestion
+        ("/get_question", GetQuestionHandler),
+        ("/submit_answer", SubmitAnswerHandler),
+        ("/get_logs", GetLogHandler),
         ('/(.*)', StaticFileHandler, {"path": os.path.join(".", 'www/')}),
     ])
     app.ocr = ocr;

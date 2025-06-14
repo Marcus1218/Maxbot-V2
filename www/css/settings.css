@@ -1,14 +1,57 @@
+#pixel-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Use viewport width */
+    height: 100vh; /* Use viewport height */
+    z-index: 0; /* Behind other content */
+    background-color: #000000; /* Base black for 8-bit */
+    /* Simple pixel effect using repeating gradients */
+    background-image:
+        repeating-linear-gradient(45deg, #1a1a1a 25%, transparent 25%, transparent 75%, #1a1a1a 75%, #1a1a1a),
+        repeating-linear-gradient(-45deg, #1a1a1a 25%, transparent 25%, transparent 75%, #1a1a1a 75%, #1a1a1a);
+    background-size: 6px 6px; /* Size of the 'pixels' */
+    opacity: 0.7; /* Make it a bit subtle */
+}
+
+#animated-gif-placeholder {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 120px; /* Adjust as needed */
+    height: 120px; /* Adjust as needed */
+    border: 3px dashed #ffcc00; /* Yellow dashed border */
+    background-color: rgba(0,0,0,0.5); /* Semi-transparent black background */
+    display: flex; /* For centering text if no image src */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #ffcc00;
+    font-size: 0.8em;
+    z-index: 10; /* Above pixel background, below modals if any */
+}
+#animated-gif-placeholder:before {
+    content: "Update SRC for GIF"; /* Show this if src is empty */
+}
+#animated-gif-placeholder[src]:not([src=""]) {
+    display: block; /* Standard display if src is set */
+}
+#animated-gif-placeholder[src]:not([src=""]):before {
+    content: ""; /* Hide :before content if src is set */
+}
+
 body {
 	margin: 0;
 	font-family: 'Roboto', 'Noto Sans TC', sans-serif;
 	color: #ffffff; /* 提高對比度，使用純白字體 */
+    /* background-color: #121212; */ /* Removed, handled by pixel-background or page-wrapper */
 }
 
 .page-wrapper {
-    position: relative; /* Needed if any absolute positioning was tied to body */
-    z-index: 1; /* Ensures it's above any remnants if body had complex stacking */
-    background-color: #121212; /* Maintain dark background */
-    /* Add any other global page styling here if needed */
+    position: relative;
+    z-index: 1;
+    /* background-color: #121212; */ /* Remove or make transparent if pixel bg should be 'under' it */
+    background-color: transparent; /* Allow pixel background to show through if container is also transparent */
 }
 
 .container {

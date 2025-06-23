@@ -13,17 +13,22 @@ MaxBot 是一款支援多平台、多網站的自動化搶票工具，支援 KKT
 - 支援 Chrome Extension 擴充
 
 ## 安裝方式
-1. 安裝 Python 3.7 以上版本。
-2. 安裝必要套件：
+1. 下載專案原始碼：
+   ```bash
+   git clone https://github.com/Marcus1218/Maxbot-V2
+   cd Maxbot-V2
+   ```
+2. 安裝 Python 3.7 以上版本。
+3. 安裝必要套件：
    ```bash
    pip install -r requirement.txt
    ```
-3. （建議）安裝 Chrome 瀏覽器與對應 chromedriver。
-4. 執行 `settings.py` 啟動 Web 設定介面：
+4. （建議）安裝 Chrome 瀏覽器與對應 chromedriver。
+5. 執行 `settings.py` 啟動 Web 設定介面：
    ```bash
    python3 settings.py
    ```
-5. 預設會自動開啟 http://127.0.0.1:16888/settings.html 進行設定。
+6. 預設會自動開啟 http://127.0.0.1:16888/settings.html 進行設定。
 
 ## Docker 部署
 
